@@ -10,6 +10,13 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
     <dependencies>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.30</version>
+        </dependency>
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -31,6 +38,7 @@
             <artifactId>materialfx</artifactId>
             <version>11.13.5</version>
           </dependency>
+          
     </dependencies>
     <build>
         <plugins>

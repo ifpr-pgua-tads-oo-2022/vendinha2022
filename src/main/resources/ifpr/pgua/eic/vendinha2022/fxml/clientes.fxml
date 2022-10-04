@@ -49,7 +49,7 @@
             </HBox>
          </children>
       </GridPane>
-      <TableView fx:id="tbClientes" prefHeight="424.0" prefWidth="800.0">
+      <TableView fx:id="tbClientes" prefHeight="424.0" prefWidth="800.0" onMouseClicked="#atualizar">
         <columns>
           <TableColumn fx:id="tbcId" prefWidth="75.0" text="Id" />
           <TableColumn fx:id="tbcNome" prefWidth="278.0" text="Nome" />
