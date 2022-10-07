@@ -2,6 +2,7 @@ package ifpr.pgua.eic.vendinha2022.controllers.ViewModels;
 
 import ifpr.pgua.eic.vendinha2022.model.entities.Cliente;
 import ifpr.pgua.eic.vendinha2022.model.repositories.GerenciadorLoja;
+import ifpr.pgua.eic.vendinha2022.model.results.Result;
 import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -43,6 +44,8 @@ public class TelaClientesViewModel {
     /*Objeto que serve para indicar qual linha da tabela está selecionada. */
     private ObjectProperty<ClienteRow> selecionado = new SimpleObjectProperty<>();
 
+    private ObjectProperty<Result> alertProperty = new SimpleObjectProperty<>();
+
     private GerenciadorLoja gerenciador;
 
     public TelaClientesViewModel(GerenciadorLoja gerenciador){
@@ -66,6 +69,10 @@ public class TelaClientesViewModel {
 
     public ObservableList<ClienteRow> getClientes(){
         return this.obsClientes;
+    }
+
+    public ObjectProperty<Result> alertProperty(){
+        return alertProperty;
     }
 
     /*Métodos para acesso as propriedades. */
@@ -132,6 +139,8 @@ public class TelaClientesViewModel {
         spCpf.setValue(cliente.getCpf());
         spEmail.setValue(cliente.getEmail());
         spTelefone.setValue(cliente.getTelefone());
+
+        alertProperty.setValue(Result.fail("Teste"));
 
     }
 
