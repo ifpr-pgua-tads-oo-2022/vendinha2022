@@ -138,6 +138,31 @@ public class GerenciadorLoja {
             return Result.fail("Produto já cadastrado!");
         }
 
+        try{
+            //criando uma conexão
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/app","root",""); 
+            //wagnerweinert.com.br:3306/tads21_SEUNOME
+
+            //preparando o comando sql
+            PreparedStatement pstm = con.prepareStatement("INSERT INTO produtos(nome,descricao,valor,quantidadeEstoque) VALUES (?,?,?,?)");
+            
+            //ajustando os parâmetros do comando
+            pstm.setString(1, nome);
+            pstm.setString(2,descricao);
+            pstm.setDouble(3,valor);
+            pstm.setDouble(4,quantidade);
+
+            pstm.execute();
+
+            pstm.close();
+            con.close();
+
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return Result.fail(e.getMessage());
+        }
+
+
         Produto produto = new Produto(nome,descricao,valor,quantidade);
         produtos.add(produto);
 
@@ -146,6 +171,31 @@ public class GerenciadorLoja {
     }
 
     public List<Produto> getProdutos(){
+        produtos.clear();
+        try{
+            //criando uma conexão
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/app","root",""); 
+            
+            PreparedStatement pstm = con.prepareStatement("SELECT * FROM produtos");
+
+            ResultSet rs = pstm.executeQuery();
+            
+            while(rs.next()){
+                int id = rs.getInt("id");
+                String nome = rs.getString("nome");
+                String descricao = rs.getString("descricao");
+                Double valor = rs.getDouble("valor");
+                Double quantidadeEstoque = rs.getDouble("quantidadeEstoque");
+
+                Produto produto = new Produto(id,nome, descricao, valor, quantidadeEstoque);
+                produtos.add(produto);
+            }
+
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+
         return Collections.unmodifiableList(produtos);
     }
 
