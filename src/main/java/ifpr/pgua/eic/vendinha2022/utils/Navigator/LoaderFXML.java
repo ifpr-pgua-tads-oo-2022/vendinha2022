@@ -1,4 +1,4 @@
-package ifpr.pgua.eic.vendinha2022.utils;
+package ifpr.pgua.eic.vendinha2022.utils.Navigator;
 
 import java.io.IOException;
 import java.net.URL;
