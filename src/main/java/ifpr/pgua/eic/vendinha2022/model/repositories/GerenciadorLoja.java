@@ -19,6 +19,7 @@ import java.util.Optional;
 import com.google.gson.Gson;
 import com.mysql.cj.xdevapi.PreparableStatement;
 
+import ifpr.pgua.eic.vendinha2022.model.FabricaConexoes;
 import ifpr.pgua.eic.vendinha2022.model.entities.Cliente;
 import ifpr.pgua.eic.vendinha2022.model.entities.Produto;
 import ifpr.pgua.eic.vendinha2022.model.entities.Venda;
@@ -34,10 +35,14 @@ public class GerenciadorLoja {
     private List<Venda> vendas;
     private Venda venda;
 
-    public GerenciadorLoja(){
+    private FabricaConexoes fabricaConexoes;
+
+    public GerenciadorLoja(FabricaConexoes fabricaConexoes){
         clientes = new ArrayList<>();
         produtos = new ArrayList<>();
         vendas = new ArrayList<>();
+
+        this.fabricaConexoes = fabricaConexoes;
     }
 
     public void geraFakes(){
@@ -48,87 +53,6 @@ public class GerenciadorLoja {
     }
 
 
-    public Result adicionarCliente(String nome, String cpf, String email, String telefone){
-
-        Optional<Cliente> busca = clientes.stream().filter((cli)->cli.getCpf().equals(cpf)).findFirst();
-        
-        if(busca.isPresent()){
-            return Result.fail("Cliente já cadastrado!");
-        }
-
-
-
-        try{
-            //criando uma conexão
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/app","root",""); 
-            //wagnerweinert.com.br:3306/tads21_SEUNOME
-
-            //preparando o comando sql
-            PreparedStatement pstm = con.prepareStatement("INSERT INTO clientes(nome,cpf,email,telefone) VALUES (?,?,?,?)");
-            
-            //ajustando os parâmetros do comando
-            pstm.setString(1, nome);
-            pstm.setString(2,cpf);
-            pstm.setString(3,email);
-            pstm.setString(4,telefone);
-
-            pstm.execute();
-
-            pstm.close();
-            con.close();
-
-        }catch(SQLException e){
-            System.out.println(e.getMessage());
-            return Result.fail(e.getMessage());
-        }
-
-        Cliente cliente = new Cliente(nome,cpf,email,telefone);
-        clientes.add(cliente);
-
-        return Result.success("Cliente cadastrado com sucesso!");
-    }
-
-    public Result atualizarCliente(String cpf, String novoEmail, String novoTelefone){
-        Optional<Cliente> busca = clientes.stream().filter((cli)->cli.getCpf().equals(cpf)).findFirst();
-        
-        if(busca.isPresent()){
-            Cliente cliente = busca.get();
-            cliente.setEmail(novoEmail);
-            cliente.setTelefone(novoTelefone);
-
-            return Result.success("Cliente atualizado com sucesso!");
-        }
-        return Result.fail("Cliente não encontrado!");
-    }
-
-    public List<Cliente> getClientes(){
-        clientes.clear();
-        try{
-            //criando uma conexão
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/app","root",""); 
-            
-            PreparedStatement pstm = con.prepareStatement("SELECT * FROM clientes");
-
-            ResultSet rs = pstm.executeQuery();
-            
-            while(rs.next()){
-                int id = rs.getInt("id");
-                String nome = rs.getString("nome");
-                String cpf = rs.getString("cpf");
-                String email = rs.getString("email");
-                String telefone = rs.getString("telefone");
-
-                Cliente c = new Cliente(id,nome, cpf, email, telefone);
-                clientes.add(c);
-            }
-
-        }catch(SQLException e){
-            System.out.println(e.getMessage());
-            return null;
-        }
-
-        return Collections.unmodifiableList(clientes);
-    }
 
     public Result adicionarProduto(String nome, String descricao, double valor, double quantidade){
 
@@ -140,7 +64,7 @@ public class GerenciadorLoja {
 
         try{
             //criando uma conexão
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/app","root",""); 
+            Connection con = fabricaConexoes.getConnection(); 
             //wagnerweinert.com.br:3306/tads21_SEUNOME
 
             //preparando o comando sql
@@ -174,7 +98,7 @@ public class GerenciadorLoja {
         produtos.clear();
         try{
             //criando uma conexão
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/app","root",""); 
+            Connection con = fabricaConexoes.getConnection(); 
             
             PreparedStatement pstm = con.prepareStatement("SELECT * FROM produtos");
 
@@ -261,38 +185,5 @@ public class GerenciadorLoja {
     public List<Venda> getVendas(){
         return Collections.unmodifiableList(vendas);
     }
-
-    public void salvar(){
-
-        Gson gson = new Gson();
-
-        try(FileWriter fout = new FileWriter("loja.json"); BufferedWriter bout = new BufferedWriter(fout)){
-
-            bout.write(gson.toJson(this));
-        }catch(IOException e ){
-            System.out.println("Problema ao salvar arquivo!");
-        }
-        
-    }
-
-    public void carregar(){
-
-        Gson gson = new Gson();
-
-        try(FileReader fin = new FileReader("loja.json"); BufferedReader bin = new BufferedReader(fin)){
-
-            GerenciadorLoja temp = gson.fromJson(bin, GerenciadorLoja.class);
-
-            this.clientes.addAll(temp.getClientes());
-            this.produtos.addAll(temp.getProdutos());
-            this.vendas.addAll(temp.getVendas());
-
-        }catch(IOException e ){
-            System.out.println("Problema ao salvar arquivo!");
-        }
-    }
-
-
-
 
 }
