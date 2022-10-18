@@ -11,6 +11,7 @@ import ifpr.pgua.eic.vendinha2022.model.entities.Produto;
 import ifpr.pgua.eic.vendinha2022.model.entities.Venda;
 import ifpr.pgua.eic.vendinha2022.model.repositories.ClientesRepository;
 import ifpr.pgua.eic.vendinha2022.model.repositories.ProdutosRepository;
+import ifpr.pgua.eic.vendinha2022.model.repositories.VendaRepository;
 import ifpr.pgua.eic.vendinha2022.model.results.Result;
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
@@ -37,11 +38,15 @@ public class TelaNovaVendaViewModel {
     
     private ProdutosRepository produtosRepository;
     private ClientesRepository clientesRepository;
+    private VendaRepository vendaRepository;
     
 
-    public TelaNovaVendaViewModel(ProdutosRepository produtosRepository, ClientesRepository clientesRepository){
+    public TelaNovaVendaViewModel(ProdutosRepository produtosRepository, 
+                                  ClientesRepository clientesRepository,
+                                  VendaRepository vendaRepository ){
         this.produtosRepository = produtosRepository;
         this.clientesRepository = clientesRepository;
+        this.vendaRepository = vendaRepository;
 
         dataHora = LocalDateTime.now();
         dataProperty.set(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(dataHora));
@@ -139,10 +144,7 @@ public class TelaNovaVendaViewModel {
         Cliente cliente = clienteProperty.get();
 
 
-        Venda venda = new Venda(cliente, dataHora);
-        venda.setItens(itensVenda);
-
-        return Result.success("Finalizada!");
+        return vendaRepository.cadastrar(dataHora,cliente,itensVenda);
 
     }
 

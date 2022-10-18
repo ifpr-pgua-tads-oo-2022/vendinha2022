@@ -110,6 +110,10 @@ public class JDBCProdutoDAO implements ProdutoDAO {
                 produtos.add(produto);
             }
 
+            rs.close();
+            pstm.close();
+            con.close();
+
             return produtos;
 
         }catch(SQLException e){

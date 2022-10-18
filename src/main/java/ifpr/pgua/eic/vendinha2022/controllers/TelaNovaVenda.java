@@ -116,5 +116,11 @@ public class TelaNovaVenda extends BaseController implements Initializable {
         showMessage(resultado);
     }
 
+    @FXML
+    private void finalizar(){
+        Result resultado = viewModel.finalizarVenda();
+        showMessage(resultado);
+    }
+
 }
 

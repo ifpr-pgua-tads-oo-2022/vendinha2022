@@ -21,6 +21,15 @@ public class ProdutosRepository {
 
         //a busca poder ser omitida se for configurada a restrição
         //no banco
+        //validação dos atributos
+        if(valor < 0){
+            return Result.fail("Valor inválido!");
+        }
+
+        if(quantidade < 0){
+            return Result.fail("Quantidade inválida!");
+        }
+        
         Produto produto = new Produto(nome,descricao,valor,quantidade);
         return dao.create(produto);
         

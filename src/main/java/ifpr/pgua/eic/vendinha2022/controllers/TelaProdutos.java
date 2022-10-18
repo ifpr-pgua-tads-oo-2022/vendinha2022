@@ -73,7 +73,7 @@ public class TelaProdutos extends BaseController implements Initializable {
         //ligando a lista de ProdutoRow com a tabela
         tbProdutos.setItems(viewModel.getProdutos());
 
-        //ligando os textfields com as propertys
+        //ligando os textfields com as properties
 
         tfNome.textProperty().bindBidirectional(viewModel.getNomeProperty());
         tfDescricao.textProperty().bindBidirectional(viewModel.getDescricaoProperty());

@@ -27,10 +27,11 @@ public class Venda {
         this.desconto = desconto;
     }
 
-    public Venda(Cliente cliente, LocalDateTime dataHora){
+    public Venda(Cliente cliente, LocalDateTime dataHora,List<ItemVenda> itens){
         this.itens = new ArrayList<>();
         this.cliente = cliente;
         this.dataHora = dataHora;
+        this.itens = itens;
     }
 
     public void adicionarProduto(Produto p, double quantidade){

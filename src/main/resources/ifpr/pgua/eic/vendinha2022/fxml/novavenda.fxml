@@ -52,7 +52,7 @@
       </HBox>
       <HBox alignment="CENTER_RIGHT" prefHeight="56.0" prefWidth="525.0">
          <children>
-            <MFXButton fx:id="btFinalizar" text="Finalizar" textAlignment="JUSTIFY" />
+            <MFXButton fx:id="btFinalizar" text="Finalizar" textAlignment="JUSTIFY" onAction="#finalizar" />
          </children>
       </HBox>
    </children>
