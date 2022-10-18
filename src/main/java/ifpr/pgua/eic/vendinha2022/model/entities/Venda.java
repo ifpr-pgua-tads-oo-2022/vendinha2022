@@ -88,6 +88,10 @@ public class Venda {
     public List<ItemVenda> getItens() {
         return Collections.unmodifiableList(itens);
     }
+
+    public void setItens(List<ItemVenda> itens){
+        this.itens = itens;
+    }
     
     public LocalDateTime getDataHora() {
         return dataHora;

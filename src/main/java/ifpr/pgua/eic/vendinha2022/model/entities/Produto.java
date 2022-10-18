@@ -55,5 +55,8 @@ public class Produto {
         this.quantidadeEstoque = quantidadeEstoque;
     }
 
+    public String toString(){
+        return this.nome;
+    }
     
 }

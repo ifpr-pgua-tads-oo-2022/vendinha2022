@@ -49,7 +49,7 @@ public class TelaProdutos extends BaseController implements Initializable {
     public void initialize(URL arg0, ResourceBundle arg1) {
         // TODO Auto-generated method stub
         
-
+        
         //inializando as colunas e a renderização do valor das células
         MFXTableColumn<ProdutoRow> tbcNome = new MFXTableColumn<>("Nome");
         tbcNome.setRowCellFactory(produtoRow -> new MFXTableRowCell<>(t -> t.nomeProperty().getValue()));
