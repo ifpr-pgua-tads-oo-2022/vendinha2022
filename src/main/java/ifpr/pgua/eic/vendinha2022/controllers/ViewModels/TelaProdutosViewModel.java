@@ -4,8 +4,10 @@ import ifpr.pgua.eic.vendinha2022.model.entities.Produto;
 import ifpr.pgua.eic.vendinha2022.model.repositories.ProdutosRepository;
 import ifpr.pgua.eic.vendinha2022.model.results.Result;
 import ifpr.pgua.eic.vendinha2022.model.results.SuccessResult;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.MapProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleMapProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -18,7 +20,13 @@ public class TelaProdutosViewModel {
     private StringProperty valorProperty = new SimpleStringProperty("0.0");
     private StringProperty quantidadeEstoqueProperty = new SimpleStringProperty("0.0");
 
+    private StringProperty textoBotaoProperty = new SimpleStringProperty("Cadastrar");
+
+    private ObjectProperty<ProdutoRow> linhaSelecionadaProperty = new SimpleObjectProperty<>();
+
     private ObservableList<ProdutoRow> produtos = FXCollections.observableArrayList();
+
+    private boolean atualizando = false;
 
     private ProdutosRepository repository;
 
@@ -36,6 +44,12 @@ public class TelaProdutosViewModel {
         for(Produto produto:repository.getProdutos()){
             produtos.add(new ProdutoRow(produto));
         }
+
+        
+    }
+
+    public ObjectProperty<ProdutoRow> getLinhaSelecionadaProperty(){
+        return linhaSelecionadaProperty;
     }
 
     public StringProperty getNomeProperty() {
@@ -58,6 +72,10 @@ public class TelaProdutosViewModel {
         return produtos;
     }
 
+    public StringProperty getTextoBotaoProperty(){
+        return textoBotaoProperty;
+    }
+
     
     public Result adicionar(){
         
@@ -78,7 +96,16 @@ public class TelaProdutosViewModel {
             return Result.fail("Quantidade inválida!");
         }
 
-        Result resultado = repository.adicionarProduto(nome, descricao, valor, quantidade);
+        Result resultado;
+        if(atualizando){   
+            Produto produto = linhaSelecionadaProperty.get().getProduto(); 
+            resultado = repository.atualizarProduto(produto.getId(),nome,descricao,valor,quantidade);
+        }else{
+            resultado = repository.adicionarProduto(nome, descricao, valor, quantidade);
+        
+        }
+
+
         if(resultado instanceof SuccessResult){
             limpar();
             updateList();
@@ -87,11 +114,32 @@ public class TelaProdutosViewModel {
         return resultado;
     }
 
+    public void preencheTextFieldsParaAtualizar(){
+
+        if(linhaSelecionadaProperty.get() != null){
+            Produto produto = linhaSelecionadaProperty.get().getProduto();
+
+            nomeProperty.setValue(produto.getNome());
+            descricaoProperty.setValue(produto.getDescricao());
+            quantidadeEstoqueProperty.setValue(String.valueOf(produto.getQuantidadeEstoque()));
+            valorProperty.setValue(String.valueOf(produto.getValor()));
+            
+            textoBotaoProperty.setValue("Atualizar");
+            atualizando = true;
+        }
+        
+
+
+    }
+
     public void limpar(){
         nomeProperty.setValue("");
         descricaoProperty.setValue("");
         valorProperty.setValue("0.0");
         quantidadeEstoqueProperty.setValue("0.0");
+
+        atualizando = false;
+        textoBotaoProperty.setValue("Cadastrar");
     }
 
 

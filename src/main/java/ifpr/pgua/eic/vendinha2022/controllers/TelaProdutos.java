@@ -14,8 +14,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 
 public class TelaProdutos extends BaseController implements Initializable {
     
@@ -36,7 +39,7 @@ public class TelaProdutos extends BaseController implements Initializable {
     private TextField tfValor;
 
     @FXML
-    private MFXTableView<ProdutoRow> tbProdutos;
+    private TableView<ProdutoRow> tbProdutos;
 
     private TelaProdutosViewModel viewModel;
 
@@ -51,24 +54,29 @@ public class TelaProdutos extends BaseController implements Initializable {
         
         
         //inializando as colunas e a renderização do valor das células
-        MFXTableColumn<ProdutoRow> tbcNome = new MFXTableColumn<>("Nome");
-        tbcNome.setRowCellFactory(produtoRow -> new MFXTableRowCell<>(t -> t.nomeProperty().getValue()));
+        TableColumn<ProdutoRow, String> tbcNome = new TableColumn<>("Nome");
+        tbcNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
 
-        MFXTableColumn<ProdutoRow> tbcId = new MFXTableColumn<>("Id");
-        tbcId.setRowCellFactory(produto -> new MFXTableRowCell<>(t -> t.idProperty().getValue()));
+        TableColumn<ProdutoRow,String> tbcId = new TableColumn<>("Id");
+        tbcId.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-        MFXTableColumn<ProdutoRow> tbcDescricao = new MFXTableColumn<>("Descrição");
-        tbcDescricao.setRowCellFactory(produto -> new MFXTableRowCell<>(t -> t.descricaoProperty().getValue()));
+        TableColumn<ProdutoRow,String> tbcDescricao = new TableColumn<>("Descrição");
+        tbcDescricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 
-        MFXTableColumn<ProdutoRow> tbcValor = new MFXTableColumn<>("Valor R$");
-        tbcValor.setRowCellFactory(produto -> new MFXTableRowCell<>(t -> t.valorProperty().getValue()));
+        TableColumn<ProdutoRow,String> tbcValor = new TableColumn<>("Valor R$");
+        tbcValor.setCellValueFactory(new PropertyValueFactory<>("valor"));
         
-        MFXTableColumn<ProdutoRow> tbcQuantidadeEstoque = new MFXTableColumn<>("Quantidade Estoque");
-        tbcQuantidadeEstoque.setRowCellFactory(produto -> new MFXTableRowCell<>(t -> t.quantidadeEstoqueProperty().getValue()));
+        TableColumn<ProdutoRow,String> tbcQuantidadeEstoque = new TableColumn<>("Quantidade Estoque");
+        tbcQuantidadeEstoque.setCellValueFactory(new PropertyValueFactory<>("quantidadeEstoque"));
         
+        tbProdutos.setOnMouseClicked(this::atualizar);
 
         //adicionando as colunas na tabela
-        tbProdutos.getTableColumns().addAll(tbcId,tbcNome,tbcDescricao,tbcValor,tbcQuantidadeEstoque);
+        tbProdutos.getColumns().addAll(tbcId,tbcNome,tbcDescricao,tbcValor,tbcQuantidadeEstoque);
+
+
+        //ligando a propriedade da linha selecionada com o
+        viewModel.getLinhaSelecionadaProperty().bind(tbProdutos.getSelectionModel().selectedItemProperty());
 
         //ligando a lista de ProdutoRow com a tabela
         tbProdutos.setItems(viewModel.getProdutos());
@@ -80,6 +88,7 @@ public class TelaProdutos extends BaseController implements Initializable {
         tfValor.textProperty().bindBidirectional(viewModel.getValorProperty());
         tfQuantidade.textProperty().bindBidirectional(viewModel.getQuantidadeEstoqueProperty());
 
+        btCadastrar.textProperty().bindBidirectional(viewModel.getTextoBotaoProperty());
     }
 
     @FXML
@@ -90,9 +99,19 @@ public class TelaProdutos extends BaseController implements Initializable {
     }
 
     @FXML
+    private void atualizar(MouseEvent evt){
+        
+        if(evt.getClickCount() == 2){
+            viewModel.preencheTextFieldsParaAtualizar();
+        }
+    }
+
+    @FXML
     void limpar(ActionEvent event) {
         viewModel.limpar();
     }
+
+    
 
 
 

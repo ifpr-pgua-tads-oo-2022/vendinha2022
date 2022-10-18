@@ -67,7 +67,7 @@ public class JDBCProdutoDAO implements ProdutoDAO {
             pstm.setString(2, obj.getDescricao());
             pstm.setDouble(3, obj.getValor());
             pstm.setDouble(4, obj.getQuantidadeEstoque());
-            pstm.setInt(5,id);
+            pstm.setInt(5, id);
 
             pstm.execute();
 

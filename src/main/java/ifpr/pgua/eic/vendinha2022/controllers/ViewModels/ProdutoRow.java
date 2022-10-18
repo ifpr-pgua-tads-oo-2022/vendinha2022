@@ -1,6 +1,5 @@
 package ifpr.pgua.eic.vendinha2022.controllers.ViewModels;
 
-import ifpr.pgua.eic.vendinha2022.model.entities.Cliente;
 import ifpr.pgua.eic.vendinha2022.model.entities.Produto;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;

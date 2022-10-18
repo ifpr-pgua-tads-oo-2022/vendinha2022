@@ -48,7 +48,7 @@ public class Produto {
     public void setValor(double valor) {
         this.valor = valor;
     }
-    public double getQuantidadeEstoque() {
+    public Double getQuantidadeEstoque() {
         return quantidadeEstoque;
     }
     public void setQuantidadeEstoque(double quantidadeEstoque) {

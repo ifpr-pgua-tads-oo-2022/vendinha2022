@@ -29,7 +29,7 @@ public class ProdutosRepository {
         if(quantidade < 0){
             return Result.fail("Quantidade inválida!");
         }
-        
+
         Produto produto = new Produto(nome,descricao,valor,quantidade);
         return dao.create(produto);
         
@@ -39,6 +39,21 @@ public class ProdutosRepository {
     public List<Produto> getProdutos(){
         produtos = dao.getAll();
         return Collections.unmodifiableList(produtos);
+    }
+
+    public Result atualizarProduto(int id, String nome, String descricao, Double valor, Double quantidade) {
+        
+        if(valor < 0){
+            return Result.fail("Valor inválido!");
+        }
+
+        if(quantidade < 0){
+            return Result.fail("Quantidade inválida!");
+        }
+
+        Produto produto = new Produto(nome,descricao,valor,quantidade);
+        return dao.update(id,produto);   
+        
     }
 
 }

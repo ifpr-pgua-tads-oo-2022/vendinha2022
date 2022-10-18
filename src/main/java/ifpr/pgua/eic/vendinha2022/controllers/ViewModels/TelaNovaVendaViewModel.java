@@ -1,19 +1,15 @@
 package ifpr.pgua.eic.vendinha2022.controllers.ViewModels;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import ifpr.pgua.eic.vendinha2022.model.entities.Cliente;
 import ifpr.pgua.eic.vendinha2022.model.entities.ItemVenda;
 import ifpr.pgua.eic.vendinha2022.model.entities.Produto;
-import ifpr.pgua.eic.vendinha2022.model.entities.Venda;
 import ifpr.pgua.eic.vendinha2022.model.repositories.ClientesRepository;
 import ifpr.pgua.eic.vendinha2022.model.repositories.ProdutosRepository;
 import ifpr.pgua.eic.vendinha2022.model.repositories.VendaRepository;
 import ifpr.pgua.eic.vendinha2022.model.results.Result;
-import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;

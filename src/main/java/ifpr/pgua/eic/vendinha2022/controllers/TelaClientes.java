@@ -5,19 +5,14 @@ import java.util.ResourceBundle;
 
 import ifpr.pgua.eic.vendinha2022.controllers.ViewModels.ClienteRow;
 import ifpr.pgua.eic.vendinha2022.controllers.ViewModels.TelaClientesViewModel;
-import ifpr.pgua.eic.vendinha2022.model.entities.Cliente;
 import ifpr.pgua.eic.vendinha2022.model.results.Result;
-import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableStringValue;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
