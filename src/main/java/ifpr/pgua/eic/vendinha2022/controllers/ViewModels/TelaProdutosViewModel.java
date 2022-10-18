@@ -2,6 +2,7 @@ package ifpr.pgua.eic.vendinha2022.controllers.ViewModels;
 
 import ifpr.pgua.eic.vendinha2022.model.entities.Produto;
 import ifpr.pgua.eic.vendinha2022.model.repositories.GerenciadorLoja;
+import ifpr.pgua.eic.vendinha2022.model.repositories.ProdutosRepository;
 import ifpr.pgua.eic.vendinha2022.model.results.Result;
 import ifpr.pgua.eic.vendinha2022.model.results.SuccessResult;
 import javafx.beans.property.DoubleProperty;
@@ -20,10 +21,10 @@ public class TelaProdutosViewModel {
 
     private ObservableList<ProdutoRow> produtos = FXCollections.observableArrayList();
 
-    private GerenciadorLoja gerenciador;
+    private ProdutosRepository repository;
 
-    public TelaProdutosViewModel(GerenciadorLoja gerenciador){
-        this.gerenciador = gerenciador;
+    public TelaProdutosViewModel(ProdutosRepository gerenciador){
+        this.repository = gerenciador;
 
         updateList();
     }
@@ -33,7 +34,7 @@ public class TelaProdutosViewModel {
      */
     private void updateList(){
         produtos.clear();
-        for(Produto produto:gerenciador.getProdutos()){
+        for(Produto produto:repository.getProdutos()){
             produtos.add(new ProdutoRow(produto));
         }
     }
@@ -78,7 +79,7 @@ public class TelaProdutosViewModel {
             return Result.fail("Quantidade inválida!");
         }
 
-        Result resultado = gerenciador.adicionarProduto(nome, descricao, valor, quantidade);
+        Result resultado = repository.adicionarProduto(nome, descricao, valor, quantidade);
         if(resultado instanceof SuccessResult){
             limpar();
             updateList();
