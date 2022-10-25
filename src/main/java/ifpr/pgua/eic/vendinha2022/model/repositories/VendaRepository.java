@@ -8,8 +8,10 @@ import ifpr.pgua.eic.vendinha2022.model.daos.ProdutoDAO;
 import ifpr.pgua.eic.vendinha2022.model.daos.VendaDAO;
 import ifpr.pgua.eic.vendinha2022.model.entities.Cliente;
 import ifpr.pgua.eic.vendinha2022.model.entities.ItemVenda;
+import ifpr.pgua.eic.vendinha2022.model.entities.Produto;
 import ifpr.pgua.eic.vendinha2022.model.entities.Venda;
 import ifpr.pgua.eic.vendinha2022.model.results.Result;
+import ifpr.pgua.eic.vendinha2022.model.results.SuccessResult;
 
 public class VendaRepository {
     
@@ -38,9 +40,38 @@ public class VendaRepository {
             return Result.fail("Nenhum item selecionado!");
         }
 
+        for(ItemVenda item:itens){
+            if(item.getQuantidade() > item.getProduto().getQuantidadeEstoque()){
+                return Result.fail("Não há a quantidade do produto!!");
+            }
+        }
+
         Venda venda = new Venda(cliente,dataHora,itens);
 
-        return vendaDao.create(venda);
+        Result resultado = vendaDao.create(venda);
+
+        if(resultado instanceof SuccessResult){
+
+            for(ItemVenda item:venda.getItens()){
+
+                Produto produtoItem = item.getProduto();
+                
+                double quantidade = produtoItem.getQuantidadeEstoque() - item.getQuantidade();
+
+                Produto novoItem = new Produto(produtoItem.getId(), produtoItem.getNome(), produtoItem.getDescricao(), produtoItem.getValor(), quantidade);
+
+                produtoDao.update(produtoItem.getId(), novoItem);
+
+
+            }
+
+
+        }
+
+        return resultado;
+
+
+
     }
 
     private Cliente carregaClienteVenda(int id){

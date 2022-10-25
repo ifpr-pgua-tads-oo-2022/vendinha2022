@@ -34,6 +34,7 @@ public class TelaNovaVendaViewModel {
     
     private ProdutosRepository produtosRepository;
     private ClientesRepository clientesRepository;
+
     private VendaRepository vendaRepository;
     
 
@@ -129,13 +130,6 @@ public class TelaNovaVendaViewModel {
 
     public Result finalizarVenda(){
 
-        if(clienteProperty.get() == null){
-            return Result.fail("Cliente não selecionado!");
-        }
-
-        if(itensVenda.size() == 0){
-            return Result.fail("Não foram inseridos produtos!");
-        }
 
         Cliente cliente = clienteProperty.get();
 

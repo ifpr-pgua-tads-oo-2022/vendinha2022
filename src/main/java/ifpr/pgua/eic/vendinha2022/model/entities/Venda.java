@@ -108,7 +108,17 @@ public class Venda {
         this.dataHora = dataHora;
     }
     public double getTotal() {
-        return total;
+        
+        double total=0.0;
+
+        for(ItemVenda item:itens){
+            total += item.getQuantidade() * item.getValorVenda();
+        }
+
+        this.total = total;
+
+        return this.total;
+
     }
     public void setTotal(double total) {
         this.total = total;
