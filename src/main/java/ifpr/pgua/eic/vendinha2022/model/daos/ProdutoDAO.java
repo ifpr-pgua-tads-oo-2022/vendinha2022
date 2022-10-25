@@ -11,6 +11,7 @@ public interface ProdutoDAO{
     Result update(int id, Produto obj);
     List<Produto> getAll();
     Produto getById(int id);
+    Produto getProdutoItem(int itemId);
     Result delete(int id);
 }
 

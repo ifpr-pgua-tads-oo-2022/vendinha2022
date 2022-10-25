@@ -27,6 +27,13 @@ public class Venda {
         this.desconto = desconto;
     }
 
+    public Venda(int id, LocalDateTime dataHora, double total, double desconto){
+        this.id = id;
+        this.dataHora = dataHora;
+        this.total = total;
+        this.desconto = desconto;
+    }
+
     public Venda(Cliente cliente, LocalDateTime dataHora,List<ItemVenda> itens){
         this.itens = new ArrayList<>();
         this.cliente = cliente;

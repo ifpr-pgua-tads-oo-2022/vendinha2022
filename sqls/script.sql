@@ -1,14 +1,14 @@
-use app;
-CREATE TABLE produtos(
-  id int AUTO_INCREMENT,
-  nome varchar(255) NOT NULL,
-  descricao varchar(255) NOT NULL,
-  valor double NOT NULL,
-  quantidadeEstoque double NOT NULL,
-  PRIMARY KEY (id)
+
+CREATE TABLE IF NOT EXISTS produtos(
+    id int AUTO_INCREMENT, 
+    nome varchar(255) NOT NULL, 
+    descricao varchar(255) NOT NULL,
+    valor double NOT NULL,
+    quantidadeEstoque double NOT NULL,
+    PRIMARY KEY (id)
 );
 
-CREATE TABLE clientes (
+CREATE TABLE IF NOT EXISTS clientes (
   id int AUTO_INCREMENT,
   nome varchar(255) NOT NULL,
   cpf varchar(11) NOT NULL unique,
@@ -17,7 +17,7 @@ CREATE TABLE clientes (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE vendas (
+CREATE TABLE IF NOT EXISTS vendas (
 	id INT AUTO_INCREMENT,
     dataHora TIMESTAMP NULL,
 	idCliente INT NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE vendas (
 	CONSTRAINT vendas_FK_cliente FOREIGN KEY (idCliente) REFERENCES clientes(id)
 );
 
-CREATE TABLE itensvenda (
+CREATE TABLE IF NOT EXISTS itensvenda (
 	id INT AUTO_INCREMENT,
     idVenda INT NOT NULL,
 	idProduto INT NOT NULL,

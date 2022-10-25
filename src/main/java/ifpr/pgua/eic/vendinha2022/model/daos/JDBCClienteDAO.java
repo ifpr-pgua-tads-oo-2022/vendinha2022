@@ -54,6 +54,20 @@ public class JDBCClienteDAO implements ClienteDAO{
         return null;
     }
 
+
+    private Cliente buildFrom(ResultSet result) throws SQLException{
+        int id = result.getInt("id");
+        String nome = result.getString("nome");
+        String cpf = result.getString("cpf");
+        String email = result.getString("email");
+        String telefone = result.getString("telefone");
+
+        Cliente cliente = new Cliente(id,nome, cpf, email, telefone);
+
+        return cliente;
+    }
+
+
     @Override
     public List<Cliente> listAll() {
         ArrayList<Cliente> clientes = new ArrayList<>();
@@ -66,15 +80,15 @@ public class JDBCClienteDAO implements ClienteDAO{
             ResultSet rs = pstm.executeQuery();
             
             while(rs.next()){
-                int id = rs.getInt("id");
-                String nome = rs.getString("nome");
-                String cpf = rs.getString("cpf");
-                String email = rs.getString("email");
-                String telefone = rs.getString("telefone");
-
-                Cliente c = new Cliente(id,nome, cpf, email, telefone);
-                clientes.add(c);
+                Cliente cliente = buildFrom(rs);
+                clientes.add(cliente);
             }
+
+
+            rs.close();
+            pstm.close();
+            con.close();
+
             return clientes;
 
         }catch(SQLException e){
@@ -85,14 +99,69 @@ public class JDBCClienteDAO implements ClienteDAO{
 
     @Override
     public Cliente getById(int id) {
-        // TODO Auto-generated method stub
-        return null;
+        
+        Cliente cliente = null;
+        try{
+            //criando uma conexão
+            Connection con = fabricaConexoes.getConnection(); 
+            
+            PreparedStatement pstm = con.prepareStatement("SELECT * FROM clientes WHERE id=?");
+
+            pstm.setInt(1, id);
+
+            ResultSet rs = pstm.executeQuery();
+            
+            while(rs.next()){
+                cliente = buildFrom(rs);
+            }
+
+
+            rs.close();
+            pstm.close();
+            con.close();
+
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        return cliente;
     }
 
     @Override
     public Result delete(int id) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+
+    @Override
+    public Cliente getClienteFromVenda(int vendaId) {
+        Cliente c = null;
+        try{   
+
+            Connection con = fabricaConexoes.getConnection();
+
+            PreparedStatement pstm = con.prepareStatement("SELECT idCliente FROM vendas WHERE id=?");
+
+            pstm.setInt(1, vendaId);
+
+            ResultSet resultSetIdCliente = pstm.executeQuery();
+            resultSetIdCliente.next();
+
+            int idCliente = resultSetIdCliente.getInt("idCliente");
+
+            c = getById(idCliente);
+
+            resultSetIdCliente.close();
+            pstm.close();
+            con.close();
+
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+        return c;
     }
     
 

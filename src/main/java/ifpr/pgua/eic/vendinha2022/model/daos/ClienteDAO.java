@@ -12,5 +12,6 @@ public interface ClienteDAO {
     Result update(int id,Cliente cliente);
     List<Cliente> listAll();
     Cliente getById(int id);
+    Cliente getClienteFromVenda(int vendaId);
     Result delete(int id);
 }

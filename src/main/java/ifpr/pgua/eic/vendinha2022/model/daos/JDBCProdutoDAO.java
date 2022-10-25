@@ -157,5 +157,34 @@ public class JDBCProdutoDAO implements ProdutoDAO {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public Produto getProdutoItem(int itemId) {
+        Produto produto = null;
+
+        try{    
+            Connection con = fabricaConexoes.getConnection();
+
+            PreparedStatement pstm = con.prepareStatement("SELECT idProduto FROM itensvenda WHERE id=?");
+
+            pstm.setInt(1, itemId);
+
+            ResultSet resultSetidProduto = pstm.executeQuery();
+            resultSetidProduto.next();
+
+            int idProduto = resultSetidProduto.getInt("idProduto");
+
+            resultSetidProduto.close();
+            pstm.close();
+            con.close();
+
+            produto = getById(idProduto);
+
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+        return produto;
+    }
     
 }

@@ -3,6 +3,8 @@ package ifpr.pgua.eic.vendinha2022.model.repositories;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import ifpr.pgua.eic.vendinha2022.model.daos.ClienteDAO;
+import ifpr.pgua.eic.vendinha2022.model.daos.ProdutoDAO;
 import ifpr.pgua.eic.vendinha2022.model.daos.VendaDAO;
 import ifpr.pgua.eic.vendinha2022.model.entities.Cliente;
 import ifpr.pgua.eic.vendinha2022.model.entities.ItemVenda;
@@ -12,10 +14,14 @@ import ifpr.pgua.eic.vendinha2022.model.results.Result;
 public class VendaRepository {
     
 
-    private VendaDAO dao;
+    private VendaDAO vendaDao;
+    private ClienteDAO clienteDao;
+    private ProdutoDAO produtoDao;
 
-    public VendaRepository(VendaDAO dao){
-        this.dao = dao;
+    public VendaRepository(VendaDAO dao, ClienteDAO clienteDao, ProdutoDAO produtoDao ){
+        this.vendaDao = dao;
+        this.clienteDao = clienteDao;
+        this.produtoDao = produtoDao;
     }
 
     public Result cadastrar(LocalDateTime dataHora, Cliente cliente, List<ItemVenda> itens){
@@ -34,8 +40,37 @@ public class VendaRepository {
 
         Venda venda = new Venda(cliente,dataHora,itens);
 
-        return dao.create(venda);
+        return vendaDao.create(venda);
+    }
 
+    private Cliente carregaClienteVenda(int id){
+        return clienteDao.getClienteFromVenda(id);
+    }
+
+    private void carregarProdutoItensVenda(Venda venda){
+
+        for(ItemVenda item:venda.getItens()){
+            item.setProduto(produtoDao.getProdutoItem(item.getId()));
+        }
 
     }
+
+    public List<Venda> listar(){
+
+        List<Venda> vendas = vendaDao.getAll();
+
+        for(Venda venda:vendas){
+            venda.setCliente(carregaClienteVenda(venda.getId()));
+
+            carregarProdutoItensVenda(venda);
+
+        }
+
+        return vendas;
+
+    }
+
+
+
+
 }
